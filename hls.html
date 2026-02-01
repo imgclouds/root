@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HLS Player</title>
+  <style>
+    body { margin: 0; background: #000; }
+    video { width: 100vw; height: 100vh; object-fit: contain; }
+  </style>
+</head>
+<body>
+  <video id="video" controls autoplay muted></video>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const videoSrc = 'https://bit.ly/vid-us'; // GANTI DENGAN URL STREAM ANDA
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Untuk Safari (iOS/macOS)
+      video.src = videoSrc;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+    } else {
+      alert('Your browser does not support HLS playback.');
+    }
+  </script>
+</body>
+</html>
